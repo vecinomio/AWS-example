@@ -1,0 +1,33 @@
+FROM maven:3.6.0-jdk-8 as maven
+WORKDIR /src
+RUN apt update -y && apt install -y dh-make debhelper devscripts fakeroot
+
+# Generating new simple web app
+RUN mvn archetype:generate \
+        -DgroupId=com.imaki.docker.example \
+        -DartifactId=smapp \
+        -DarchetypeArtifactId=maven-archetype-webapp \
+        -DinteractiveMode=false
+RUN cd smapp && mvn clean && mvn package && cd ..
+
+# Creating deb package
+RUN mkdir smapp-0.1 && cp smapp/target/smapp.war smapp-0.1 && cd smapp-0.1
+RUN cd smapp-0.1 && \
+    export EMAIL="imaki@ss.com" && \
+    export DEBFULLNAME="Igor Makienko" && \
+    dh_make -i --createorig -y && \
+    echo smapp.war /home/project > debian/install && \
+    echo "1.0" > debian/source/format && \
+    debuild -us -uc
+
+
+FROM tomcat:8
+
+LABEL maintainer = "imaki" \
+      description = "my tomcat-8 image with app.deb"
+
+WORKDIR /home/project
+COPY --from=maven /src/smapp_0.1-1_all.deb/ ./
+RUN dpkg -i smapp_0.1-1_all.deb && cp smapp.war /usr/local/tomcat/webapps/
+EXPOSE 8080:8080
+CMD ["catalina.sh", "run"]

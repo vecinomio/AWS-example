@@ -1,0 +1,9 @@
+version: '2.2'
+
+services:
+
+  tomcat:
+    build: .
+    image: vecinomio/tomcat:0.1
+    ports:
+      - 8080:8080

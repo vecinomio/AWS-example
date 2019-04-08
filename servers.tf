@@ -1,7 +1,7 @@
 resource "aws_instance" "web" {
-  ami             = "ami-090f10efc254eaf55" #Ubuntu 18.04 LTS
+  ami             = "${var.ami}" #Ubuntu 18.04 LTS
   instance_type   = "t2.micro"
-  key_name        = "imaki_Frankfurt"
+  key_name        = "${var.key_name}"
   monitoring      = "false"
   security_groups = ["${aws_security_group.new_Alex_task1_SSH_HTTP_HTTPS_8080.name}"]
 

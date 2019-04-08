@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.imaki.docker.example</groupId>
-  <artifactId>ccc</artifactId>
+  <artifactId>bbb</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>ccc Maven Webapp</name>
@@ -16,6 +16,6 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>ccc</finalName>
+    <finalName>bbb</finalName>
   </build>
 </project>

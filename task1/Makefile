@@ -1,6 +1,6 @@
 
 SHELL=/bin/bash
-PACKAGE=ccc
+PACKAGE=bbb
 RELEASE_VERSION=1.0
 BUILDDIR=./TMP/debian-build
 CHANGELOG=$(BUILDDIR)/debian/changelog

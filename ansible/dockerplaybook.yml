@@ -1,0 +1,23 @@
+---
+  - name: Docker installation
+    hosts: ubic
+    become: yes
+
+    vars:
+      src_folder: ../task1
+      dst_folder: /tmp
+
+    tasks:
+      - name: Install Docker
+        apt: name={{ item }} state=latest
+        loop:
+          - docker
+          - docker-compose
+      - name: Copy app dir
+        copy: src={{ src_folder }} dest={{ dst_folder }} mode=0555
+
+      - name: run docker-compose
+        shell: cd /tmp/task1 && docker-compose up -d
+        register: results
+      - debug:
+          var: results

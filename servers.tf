@@ -14,26 +14,42 @@ resource "aws_instance" "web" {
   tags {
     Name = "ubic"
   }
+#================ PROVISIONING BY ANSIBLE =================
+  provisioner "local-exec" {
+    command = <<EOT
+      sed -i '' '2d' .ansible/hosts.txt
+      echo ubic ansible_host=${aws_instance.web.public_ip} >> ./ansible/hosts.txt
+EOT
+  }
+  provisioner "local-exec" {
+    working_dir = "./ansible"
+    command = <<EOT
+      sleep 10
+      ansible ubic --become -m raw -a "apt install -y python-minimal python-simplejson"
+      ansible-playbook dockerplaybook.yml
+EOT
+  }
 
-  provisioner "file" {
-    source      = "script.sh"
-    destination = "/tmp/script.sh"
-  }
-  provisioner "file" {
-    source      = "./task1"
-    destination = "/tmp/task1"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/script.sh",
-      "bash /tmp/script.sh",
-    ]
-  }
-
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    private_key = "${file("imaki_Frankfurt.pem")}"
-  }
+  #=============== PROVISIONING BY SHELL ===================
+  # provisioner "file" {
+  #   source      = "script.sh"
+  #   destination = "/tmp/script.sh"
+  # }
+  # provisioner "file" {
+  #   source      = "./task1"
+  #   destination = "/tmp/task1"
+  # }
+  #
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "chmod +x /tmp/script.sh",
+  #     "bash /tmp/script.sh",
+  #   ]
+  # }
+  #
+  # connection {
+  #   type        = "ssh"
+  #   user        = "ubuntu"
+  #   private_key = "${file("imaki_Frankfurt.pem")}"
+  # }
 }

@@ -16,5 +16,7 @@ run_task() {
 }
 
 ############################## MAIN ##############################
-docker_inst
-run_task
+#docker_inst
+#run_task
+sed -i '2s/.*/ubic ansible_host=172.16.0.1/' test.txt
+

@@ -1,4 +1,4 @@
-ARG app_name=bbb
+ARG app_name=sss
 
 FROM maven:3.6.0-jdk-8 as maven
 ARG app_name
